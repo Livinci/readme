@@ -187,6 +187,7 @@ class ChatScreen extends Component {
             }}>
             <Text style= {{fontSize: 25, alignItems:'center',}}>
               My First HyperLink!!
+              Second Line!
             </Text> 
           </View>
          </View>
