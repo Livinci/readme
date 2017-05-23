@@ -14,6 +14,7 @@ import {
   TextInput,
   Alert,
 } from 'react-native';
+import Database from './src/firebaseDatabase';
 
 import {
     StackNavigator
@@ -43,7 +44,33 @@ export default class HomeScreen extends Component {
       authDomain: "rn-demo.firebaseapp.com",
       databaseURL: "https://rn-demo.firebaseio.com",
       storageBucket: "rn-demo.appspot.com"
-      })
+    })
+  
+  };
+  onLoginPress(){
+    this.login(this.state.account, this.state.password);
+  };
+  
+  async login(email, pass) {
+    
+    try {
+        await firebase.auth()
+            .signInWithEmailAndPassword(email, pass);
+
+        console.log("Logged In!");
+
+        // Navigate to the Home page
+
+    } catch (error) {
+        console.log(error.toString())
+    }
+
+}
+
+  onWriteData(){
+
+       //  Database.setUserMobile(this.state.uid, this.state.mobileForm);
+           Database.setUserMobile('key1', 'key2');
   };
   onSignupPress(){
     this.signup(this.state.account, this.state.password);
@@ -68,6 +95,7 @@ export default class HomeScreen extends Component {
   render() {
 
     const {navigate} = this.props.navigation;
+   
 
     return (
     <View style={{flex:1, flexDirection: 'column'}}>
@@ -126,11 +154,16 @@ export default class HomeScreen extends Component {
         backgroundColor: 'skyblue',}}>
         <Button 
         onPress = {()=> navigate('Chat')}
+        OnPress ={ ()=> this.onLoginPress()}
         title= 'Sign In!'/>
         
         <Button 
         onPress = {()=> this.onSignupPress()}
         title= 'Sign Up!'/>
+
+        <Button 
+        onPress = {()=> this.onWriteData()}
+        title= 'Datain!'/>
         
        </View>
     </View>
