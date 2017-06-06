@@ -13,7 +13,9 @@ import {
   Button,
   TextInput,
   Alert,
+  ToolbarAndroid
 } from 'react-native';
+
 import Database from './src/firebaseDatabase';
 
 import {
@@ -45,8 +47,33 @@ export default class HomeScreen extends Component {
       databaseURL: "https://rn-demo.firebaseio.com",
       storageBucket: "rn-demo.appspot.com"
     })
+
+    this.tasksRef = firebase.database().ref();
   
   };
+
+componentDidMount() {
+  // start listening for firebase updates
+  this.listenForTasks(this.tasksRef);
+}
+
+listenForTasks(tasksRef) {
+   tasksRef.on('value', (dataSnapshot) => {
+    var tasks = [];
+    dataSnapshot.forEach((child) => {
+        tasks.push({
+          name: child.val().date,
+          _key: child.url
+        });
+    });
+    this.setState({
+      dataSource: this.state.dataSource.cloneWithRows(tasks)
+    });
+  });
+}
+
+
+
   onLoginPress(){
     this.login(this.state.account, this.state.password);
   };
@@ -70,7 +97,7 @@ export default class HomeScreen extends Component {
   onWriteData(){
 
        //  Database.setUserMobile(this.state.uid, this.state.mobileForm);
-           Database.setUserMobile('key1', 'key2');
+           Database.setUserMobile('User1', 'User2');
   };
   onSignupPress(){
     this.signup(this.state.account, this.state.password);
